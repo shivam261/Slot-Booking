@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": " node  --env-file=.env src/index.js", 
+    "start": " node  --env-file=.env src/index.js",
     "dev": "nodemon  --env-file=.env --experimental-json-modules  src/index.js"
   },
   "keywords": [],
@@ -20,7 +20,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.15.0",
-    "mongoose": "^8.13.2"
+    "mongoose": "^8.13.2",
+    "pg": "^8.14.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
