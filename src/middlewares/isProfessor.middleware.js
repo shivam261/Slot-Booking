@@ -7,10 +7,12 @@ const isProfessor = asyncHandler(async (req, res, next) => {
     if (!token) {
         return next(new ApiError(401,"You are not logged in"));
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     if (decoded.role !== "Professor") {
         return next(new ApiError(403,"You are not a Professor"));
     }
     req.user = decoded;
+   
     next();
     });
+export { isProfessor };
