@@ -57,7 +57,7 @@ const loginProfessor = asyncHandler(async (req, res, next) => {
         maxAge: 3600000 // 1 hour
     }); 
     
-    res.status(200).json(new ApiResponse(200,professor.rows[0],"Professor logged in successfully"));
+    res.status(200).json(new ApiResponse(200,professor.rows[0],"Professor Authenticated successfully"));
 });
 const createTimeSlot = asyncHandler(async (req, res, next) => {
     const {  startTime, endTime } = req.body;
@@ -75,7 +75,7 @@ const createTimeSlot = asyncHandler(async (req, res, next) => {
         const newSlot = await pool.query(
             `INSERT INTO time_slots (professor_id, start_time, end_time) 
              VALUES ($1, $2, $3) 
-             RETURNING *`,
+             RETURNING id, professor_id, start_time, end_time`,
             [professorId, startTime, endTime]
         );
 
@@ -135,13 +135,13 @@ const cancelBookingByProfessor = asyncHandler(async (req, res, next) => {
         SELECT b.id, b.time_slot_id
         FROM bookings b
         JOIN time_slots t ON b.time_slot_id = t.id
-        WHERE b.id = $1 AND t.professor_id = $2
+        WHERE b.id = $1 AND t.professor_id = $2 and b.status='active'
     `;
 
     const result = await pool.query(checkQuery, [bookingId, professorId]);
 
     if (result.rows.length === 0) {
-        return next(new ApiError(403, "Unauthorized or booking not found"));
+        return next(new ApiError(403, "booking not found"));
     }
 
     const timeSlotId = result.rows[0].time_slot_id;

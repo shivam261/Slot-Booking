@@ -3,7 +3,8 @@ import { registerProfessor, loginProfessor,createTimeSlot,getTimeSlots,getBookin
 import { isProfessor } from "../middlewares/isProfessor.middleware.js";
 const router= Router();
 
-router.route('/register').post(registerProfessor);
+router.route('/register').post(
+registerProfessor);
 router.route('/login').post(loginProfessor);
 router.route('/createSlot').post(isProfessor,createTimeSlot);
 router.route('/getTimeSlots').get(isProfessor,getTimeSlots);

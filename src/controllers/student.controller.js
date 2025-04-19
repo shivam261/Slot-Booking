@@ -28,7 +28,6 @@ const registerStudent = asyncHandler(async (req, res, next) => {
 });
 const loginStudent = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
-    console.log("login")
     if (!email || !password) {
         return next(new ApiError(400, "Please provide all required fields"));
     }
@@ -53,7 +52,7 @@ const loginStudent = asyncHandler(async (req, res, next) => {
         maxAge: 3600000 // 1 hour
     });
     
-    res.status(200).json(new ApiResponse(200,student.rows[0].id,"Student logged in successfully"));
+    res.status(200).json(new ApiResponse(200,student.rows[0].id,"Student Authenticated successfully"));
 });
 const getSlots = asyncHandler(async (req, res, next) => {
     const studentId = req.user.id;
@@ -86,7 +85,7 @@ const createBooking = asyncHandler(async (req, res, next) => {
     const slot = await pool.query("SELECT * FROM time_slots WHERE id = $1", [slotId]);
     
     if (slot.rows.length === 0) {
-        return next(new ApiError(404, "Slot not found"));
+        return next(new ApiError(404, `slot not found ${slotId}`));
     }
     
     if (slot.rows[0].status !== "available") {
@@ -99,7 +98,7 @@ const createBooking = asyncHandler(async (req, res, next) => {
         RETURNING *`,
         [studentId, slotId, 'active']
     );
-    console.log("createBooking");
+
 
     await pool.query("UPDATE time_slots SET status = $1 WHERE id = $2", ["booked", slotId]);
 
